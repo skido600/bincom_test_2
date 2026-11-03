@@ -13,6 +13,7 @@ CORS(app)
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 
+
 def get_db():
     return psycopg.connect(
         DATABASE_URL,
@@ -183,4 +184,4 @@ def save_polling_unit_results():
         "message": "All party results saved successfully!"
     }), 201
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=os.getenv("PORT"))
