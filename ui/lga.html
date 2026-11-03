@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LGA Election Results</title>
+    <link rel="stylesheet" href="./lga.css" />
+  </head>
+  <body>
+    <main class="container">
+      <header>
+        <p class="subtitle">2011 GENERAL ELECTION</p>
+        <h2>Local Government Results</h2>
+        <p class="description">
+          View total votes for each political party in a selected LGA.
+        </p>
+      </header>
+      <nav class="navigation">
+        <a href="index.html" class="active">Polling Unit Results</a>
+        <a href="lga.html">LGA Results</a>
+        <a href="store-results.html">Store Results</a>
+      </nav>
+      <section class="results-card">
+        <label for="lgaSelect">Select Local Government</label>
+
+        <select id="lgaSelect">
+          <option value="">Loading LGAs...</option>
+        </select>
+
+        <div id="resultInfo" class="result-info">
+          Select a local government to view its results.
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Party</th>
+                <th>Total Votes</th>
+              </tr>
+            </thead>
+            <tbody id="results">
+              <tr>
+                <td colspan="2" class="empty">No results selected yet.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <footer>Delta State • Election Data</footer>
+    </main>
+
+    <script>
+      const lgaSelect = document.getElementById("lgaSelect");
+      const results = document.getElementById("results");
+      const resultInfo = document.getElementById("resultInfo");
+      const apiBaseUrl = "http://localhost:5000";
+      // Load local governments
+      fetch(`${apiBaseUrl}/api/lgas`)
+        .then((response) => response.json())
+        .then((data) => {
+          lgaSelect.innerHTML =
+            '<option value="">Choose a local government</option>';
+
+          data.forEach((lga) => {
+            const option = document.createElement("option");
+            option.value = lga.lga_id;
+            option.textContent = lga.lga_name;
+            lgaSelect.appendChild(option);
+          });
+        })
+        .catch((error) => {
+          console.error(error);
+          lgaSelect.innerHTML = '<option value="">Failed to load LGAs</option>';
+        });
+
+      // Fetch results when an LGA is selected
+      lgaSelect.addEventListener("change", () => {
+        const lgaId = lgaSelect.value;
+        const lgaName = lgaSelect.options[lgaSelect.selectedIndex].text;
+
+        if (!lgaId) {
+          results.innerHTML = `
+          <tr><td colspan="2" class="empty">Select an LGA.</td></tr>
+        `;
+          resultInfo.textContent =
+            "Select a local government to view its results.";
+          return;
+        }
+
+        resultInfo.textContent = `Results for ${lgaName}`;
+        results.innerHTML = `
+        <tr><td colspan="2" class="empty">Loading results...</td></tr>
+      `;
+
+        fetch(`${apiBaseUrl}/api/lga/results/${lgaId}`)
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.length === 0) {
+              results.innerHTML = `
+              <tr>
+                <td colspan="2" class="empty">No polling unit results found.</td>
+              </tr>
+            `;
+              return;
+            }
+
+            results.innerHTML = data
+              .map(
+                (row) => `
+            <tr>
+              <td><span class="party">${row.party_abbreviation.trim()}</span></td>
+              <td class="score">${Number(row.total_votes).toLocaleString()}</td>
+            </tr>
+          `,
+              )
+              .join("");
+          })
+          .catch((error) => {
+            console.error(error);
+            results.innerHTML = `
+            <tr><td colspan="2" class="empty">Unable to load results.</td></tr>
+          `;
+          });
+      });
+    </script>
+  </body>
+</html>

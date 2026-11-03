@@ -1,0 +1,177 @@
+@import url("https://fonts.googleapis.com/css2?family=Geist:ital,wght@0,100..900;1,100..900&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Geist", sans-serif;
+  background: #f4f6f9;
+  color: #1e293b;
+  padding: 35px 15px;
+}
+
+.container {
+  max-width: 650px;
+  margin: auto;
+}
+
+header {
+  margin-bottom: 25px;
+}
+
+.subtitle {
+  color: #15803d;
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: 1.5px;
+  margin-bottom: 8px;
+}
+
+h2 {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+header p:last-child {
+  color: #64748b;
+  font-size: 13px;
+}
+
+form {
+  background: white;
+  padding: 25px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  font-size: 13px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+select,
+input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  outline: none;
+  font-size: 13px;
+  background: white;
+}
+
+select:focus,
+input:focus {
+  border-color: #15803d;
+}
+
+h3 {
+  font-size: 16px;
+  margin: 25px 0 15px;
+}
+
+.party-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+}
+
+.party-input label {
+  color: #475569;
+  font-size: 12px;
+}
+
+button {
+  width: 100%;
+  padding: 13px;
+  margin-top: 25px;
+  border: none;
+  border-radius: 6px;
+  background: #15803d;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #166534;
+}
+
+#message {
+  margin-top: 15px;
+  font-size: 13px;
+}
+
+.success {
+  color: #15803d;
+}
+
+.error {
+  color: #dc2626;
+}
+
+@media (max-width: 450px) {
+  .party-grid {
+    grid-template-columns: 1fr;
+  }
+
+  form {
+    padding: 18px;
+  }
+}
+
+button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.loader {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid white;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  vertical-align: middle;
+  margin-right: 7px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.navigation {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 25px;
+}
+
+.navigation a {
+  text-decoration: none;
+  color: #475569;
+  background: white;
+  border: 1px solid #e2e8f0;
+  padding: 10px 15px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.navigation a:hover,
+.navigation a.active {
+  background: #15803d;
+  color: white;
+  border-color: #15803d;
+}

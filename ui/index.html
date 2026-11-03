@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Delta State Election Results</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main class="container">
+      <header>
+        <p class="subtitle">2011 GENERAL ELECTION</p>
+        <h2>Delta State Election Results</h2>
+        <p class="description">Polling unit results by political party.</p>
+      </header>
+      <nav class="navigation">
+        <a href="index.html" class="active">Polling Unit Results</a>
+        <a href="lga.html">LGA Results</a>
+        <a href="store-results.html">Store Results</a>
+      </nav>
+      <section class="results-card">
+        <div class="card-heading">
+          <h3>Polling Unit Results</h3>
+          <span class="status">Official Records</span>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Polling Unit ID</th>
+                <th>Party</th>
+                <th>Party Score</th>
+              </tr>
+            </thead>
+            <tbody id="results"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <footer>Delta State • Election Data</footer>
+    </main>
+
+    <script>
+      const apiBaseUrl = "http://localhost:5000";
+      fetch(`${apiBaseUrl}/api/pull/results`)
+        .then((response) => response.json())
+        .then((data) => {
+          document.getElementById("results").innerHTML = data
+            .map(
+              (row) => `
+            <tr>
+              <td>${row.polling_unit_uniqueid}</td>
+              <td><span class="party">${row.party_abbreviation.trim()}</span></td>
+              <td class="score">${row.party_score}</td>
+            </tr>
+          `,
+            )
+            .join("");
+        })
+        .catch((error) => console.error(error));
+    </script>
+  </body>
+</html>

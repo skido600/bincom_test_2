@@ -1,0 +1,154 @@
+@import url("https://fonts.googleapis.com/css2?family=Geist:ital,wght@0,100..900;1,100..900&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #f4f6f9;
+  color: #1e293b;
+  font-family: "Geist", sans-serif;
+  padding: 35px 15px;
+}
+.navigation {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 25px;
+}
+
+.navigation a {
+  text-decoration: none;
+  color: #475569;
+  background: white;
+  border: 1px solid #e2e8f0;
+  padding: 10px 15px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.navigation a:hover,
+.navigation a.active {
+  background: #15803d;
+  color: white;
+  border-color: #15803d;
+}
+.container {
+  max-width: 750px;
+  margin: auto;
+}
+
+header {
+  margin-bottom: 25px;
+}
+
+.subtitle {
+  color: #15803d;
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: 1.5px;
+  margin-bottom: 8px;
+}
+
+h2 {
+  font-size: 25px;
+  margin-bottom: 8px;
+}
+
+.description {
+  color: #64748b;
+  font-size: 13px;
+}
+
+.results-card {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  overflow: hidden;
+  padding: 20px;
+}
+
+label {
+  display: block;
+  font-size: 13px;
+  font-weight: bold;
+  margin-bottom: 9px;
+}
+
+select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 7px;
+  outline: none;
+  font-size: 13px;
+  background: white;
+  margin-bottom: 20px;
+}
+
+select:focus {
+  border-color: #15803d;
+}
+
+.result-info {
+  font-size: 13px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #334155;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 13px;
+}
+
+th,
+td {
+  padding: 14px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+th {
+  background: #f8fafc;
+  color: #64748b;
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
+tr:hover {
+  background: #f8fafc;
+}
+
+.party {
+  background: #eff6ff;
+  color: #1d4ed8;
+  padding: 5px 9px;
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 11px;
+}
+
+.score {
+  font-weight: bold;
+}
+
+.empty {
+  text-align: center;
+  color: #94a3b8;
+  padding: 25px;
+}
+
+footer {
+  text-align: center;
+  margin-top: 20px;
+  color: #94a3b8;
+  font-size: 11px;
+}

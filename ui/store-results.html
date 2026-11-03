@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Store Election Results</title>
+    <link rel="stylesheet" href="./store-results.css" />
+  </head>
+  <body>
+    <main class="container">
+      <header>
+        <p class="subtitle">2011 GENERAL ELECTION</p>
+        <h2>Store Polling Unit Results</h2>
+        <p>Enter the scores recorded for each political party.</p>
+      </header>
+      <nav class="navigation">
+        <a href="index.html" class="active">Polling Unit Results</a>
+        <a href="lga.html">LGA Results</a>
+        <a href="store-results.html">Store Results</a>
+      </nav>
+      <form id="resultForm">
+        <div class="form-group">
+          <label for="pollingUnit">Select Polling Unit</label>
+          <select id="pollingUnit" required>
+            <option value="">Loading polling units...</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="enteredBy">Entered By</label>
+          <input type="text" id="enteredBy" placeholder="Your name" required />
+        </div>
+
+        <h3>Party Results</h3>
+        <div id="partyFields" class="party-grid">
+          Loading political parties...
+        </div>
+
+        <button type="submit" id="submitBtn">Save All Results</button>
+
+        <p id="message"></p>
+      </form>
+    </main>
+
+    <script>
+      const API = "http://localhost:5000";
+
+      const pollingUnit = document.getElementById("pollingUnit");
+      const partyFields = document.getElementById("partyFields");
+      const form = document.getElementById("resultForm");
+      const message = document.getElementById("message");
+      const submitBtn = document.getElementById("submitBtn");
+
+      // Load polling units
+      async function loadPollingUnits() {
+        try {
+          const response = await fetch(`${API}/api/polling-units`);
+
+          if (!response.ok) {
+            throw new Error("Failed to fetch polling units");
+          }
+
+          const data = await response.json();
+
+          pollingUnit.innerHTML =
+            '<option value="">Choose a polling unit</option>';
+
+          data.forEach((unit) => {
+            const option = document.createElement("option");
+            option.value = unit.uniqueid;
+            option.textContent = `${unit.polling_unit_name} (ID: ${unit.uniqueid})`;
+
+            pollingUnit.appendChild(option);
+          });
+
+          if (data.length === 0) {
+            pollingUnit.innerHTML =
+              '<option value="">No polling units available</option>';
+          }
+        } catch (error) {
+          console.error("Polling units error:", error);
+          pollingUnit.innerHTML =
+            '<option value="">Failed to load polling units</option>';
+        }
+      }
+
+      // Load all political parties
+      async function loadParties() {
+        try {
+          const response = await fetch(`${API}/api/parties`);
+
+          if (!response.ok) {
+            throw new Error("Failed to fetch political parties");
+          }
+
+          const data = await response.json();
+
+          partyFields.innerHTML = data
+            .map(
+              (party) => `
+          <div class="party-input">
+            <label>${party.partyname.trim()}</label>
+            <input
+              type="number"
+              min="0"
+              step="1"
+              value="0"
+              data-party="${party.partyname.trim()}"
+              required
+            />
+          </div>
+        `,
+            )
+            .join("");
+
+          if (data.length === 0) {
+            partyFields.textContent = "No political parties found.";
+          }
+        } catch (error) {
+          console.error("Parties error:", error);
+          partyFields.textContent = "Unable to load political parties.";
+        }
+      }
+
+      // Save all party results
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const inputs = [...partyFields.querySelectorAll("[data-party]")];
+
+        if (!pollingUnit.value || inputs.length === 0) {
+          message.textContent =
+            "Select a polling unit and load the parties first.";
+          message.className = "error";
+          return;
+        }
+
+        const results = inputs.map((input) => ({
+          party_abbreviation: input.dataset.party,
+          party_score: Number(input.value),
+        }));
+
+        const payload = {
+          polling_unit_uniqueid: pollingUnit.value,
+          entered_by_user: document.getElementById("enteredBy").value.trim(),
+          results,
+        };
+
+        try {
+          // Show loading spinner
+          submitBtn.disabled = true;
+          submitBtn.innerHTML = '<span class="loader"></span> Saving...';
+
+          message.textContent = "";
+
+          const response = await fetch(`${API}/api/polling-unit/results`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+          });
+
+          const data = await response.json();
+
+          if (!response.ok) {
+            throw new Error(data.error || "Failed to save results");
+          }
+
+          message.textContent = data.message || "Results saved successfully!";
+
+          message.className = "success";
+
+          // Reset form but keep party fields
+          form.reset();
+
+          inputs.forEach((input) => {
+            input.value = 0;
+          });
+        } catch (error) {
+          console.error("Save error:", error);
+          message.textContent = error.message;
+          message.className = "error";
+        } finally {
+          // Restore button
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Save All Results";
+        }
+      });
+
+      // Load data when page opens
+      loadPollingUnits();
+      loadParties();
+    </script>
+  </body>
+</html>
