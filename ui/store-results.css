@@ -169,8 +169,7 @@ button:disabled {
   font-weight: bold;
 }
 
-.navigation a:hover,
-.navigation a.active {
+.navigation a:hover{
   background: #15803d;
   color: white;
   border-color: #15803d;
