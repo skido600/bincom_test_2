@@ -2,4 +2,4 @@ Flask
 flask-cors
 psycopg[binary]
 python-dotenv
-gunicorn
+gunicorn app:app --bind 0.0.0.0:5000

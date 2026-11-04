@@ -43,6 +43,12 @@
 
     <script>
       const apiBaseUrl = "https://bincom-test-2-ttgy.onrender.com";
+      const loadingRow = `
+        <tr>
+          <td colspan="3" class="loading">Loading results...</td>
+        </tr>
+      `;
+      document.getElementById("results").innerHTML = loadingRow;
       fetch(`${apiBaseUrl}/api/pull/results`)
         .then((response) => response.json())
         .then((data) => {
