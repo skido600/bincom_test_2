@@ -27,9 +27,6 @@ def home():
 
 
 # Get Delta State LGAs
-
-from flask import Flask, jsonify, request
-
 @app.route("/api/pull/results")
 def get_results():
     with get_db() as conn:
